@@ -58,105 +58,55 @@ Tie::Scalar::Callback - Scalar variables that execute callbacks
 
 =head1 DESCRIPTION
 
-This module allows you to tie a scalar variable whose value will be reset
-(subject to an expiration policy) after a certain time and/or a certain number
-of uses. One possible application for this module might be to time out session
-variables in mod_perl programs.
-
-When tying, you can specify named arguments in the form of a hash. The
-following named parameters are supported:
+This module allows you to tie a scalar variable which will execute a callback
+when storing or retrieving the value. When tying, you can specify named
+arguments in the form of a hash. The following named parameters are supported:
 
 =over 4
 
-=item C<EXPIRES>
+=item C<ON_STORE>
 
-Use C<EXPIRES> to specify an interval or absolute time after which the
-value will be reset. (Technically, the value will still be there, but the
-module's FETCH sub will return the value as dictated by the expiration
-policy.)
+Use C<ON_STORE> to specify the callback to be executed when the storing to the
+variable.  The callback will be passed the old value and the new value of the
+tied variable;
 
-Values for the C<EXPIRES> field are modeled after Netscape's cookie expiration
-times. Except, of course, that negative values don't really make sense in a
-universe with linear, one-way time. The following forms are all valid for the
-C<EXPIRES> field:
+=item C<ON_FETCH>
 
-    +30s                    30 seconds from now
-    +10m                    ten minutes from now
-    +1h                     one hour from now
-    +3M                     in three months
-    +10y                    in ten years time
-    25-Apr-2001 00:40:33    at the indicated time & date
+Use C<ON_FETCH> to specify the callback to be executed when the storing to the
+variable. The callback will be passed the current value of the tied variable.
 
-Assigning a value to the variable causes C<EXPIRES> to be reset to the
-original value.
+=head1 SEE ALSO
 
-=item C<VALUE>
-
-Using the C<VALUE> hash key, you can specify an initial value for the
-variable.
-
-=item C<NUM_USES>
-
-Alternatively or in addition to C<EXPIRES>, you can also specify a maximum
-number of times the variable may be read from before it expires. If both
-C<EXPIRES> and C<NUM_USES> are set, the variable will expire when either
-condition becomes true. If C<NUM_USES> isn't set or set to a negative
-value, it won't influence the expiration process.
-
-Assigning a value to the variable causes C<NUM_USES> to be reset to the
-original value.
-
-=item C<POLICY>
-
-The expiration policy determines what happens to the variable's value when
-it expires. If you don't specify a policy, the variable will be C<undef>
-after it has expired. You can specify either a scalar value or a code
-reference as the value of the C<POLICY> parameter. If you specify a scalar
-value, that value will be returned after the variable has expired. Thus,
-the default expiration policy is equivalent to
-
-    POLICY => undef
-
-If you specify a code reference as the value of the C<POLICY> parameter,
-that code will be called when the variable value is C<FETCH()>ed after it
-has expired. This might be used to set some other variable, or reset the
-variable to a different value, for example.
-
-=back
-
-=head1 INSTALLATION
-
-See perlmodinstall for information and options on installing Perl modules.
-
-=head1 BUGS AND LIMITATIONS
-
-No bugs have been reported.
-
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=Tie-Scalar-Timeout>.
-
-=head1 AVAILABILITY
-
-The latest version of this module is available from the Comprehensive Perl
-Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
-site near you, or see
-L<http://search.cpan.org/dist/Tie-Scalar-Timeout/>.
-
-The development version lives at
-L<http://github.com/hanekomu/Tie-Scalar-Timeout/>.
-Instead of sending patches, please fork this project using the standard git
-and github infrastructure.
+L<Gtk2::Ex::DateEntry::CellRenderer>, L<Gtk2::Ex::FormFactory::DateEntry>
 
 =head1 AUTHOR
 
-  Marcel Gruenauer <marcel@cpan.org>
+Jeffrey Hallock  <jeffrey @ jeffrey ray dot info>.
 
-=head1 COPYRIGHT AND LICENSE
+=head1 BUGS
 
-This software is copyright (c) 2003 by Marcel Gruenauer.
+None known. Please send bugs to <jeffrey @ jeffrey ray dot info>.
+Patches and suggestions welcome.
 
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
+The development version is available at
+L<http://github.com/jhallock/Tie-Scalar-Callback>
+
+=head1 LICENSE
+
+Tie-Scalar-Callback is Copyright 2010 Jeffrey Ray Hallock
+
+Tie-Scalar-Callback is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3, or (at your option) any later
+version.
+
+Tie-Scalar-Callback is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+more details.
+
+You should have received a copy of the GNU General Public License along with
+Tie-Scalar-Callback.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut
 
