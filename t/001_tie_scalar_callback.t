@@ -6,6 +6,6 @@ use strict;
 use_ok 'Tie::Scalar::Callback';
 
 
-my $var = 1;
-tie $var, 'Tie::Scalar::Callback';
+my $var;
 
+tie $var, 'Tie::Scalar::Callback', ON_STORE => sub {  };
